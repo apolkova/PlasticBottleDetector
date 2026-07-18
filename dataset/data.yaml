@@ -1,0 +1,15 @@
+names:
+- '0'
+- '1'
+- '2'
+- '3'
+nc: 4
+roboflow:
+  license: Private
+  project: bottle-detection-hsojh
+  url: https://app.roboflow.com/adelajns-workspace/bottle-detection-hsojh/2
+  version: 2
+  workspace: adelajns-workspace
+test: ../test/images
+train: ../train/images
+val: ../valid/images

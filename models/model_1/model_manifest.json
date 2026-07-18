@@ -1,0 +1,194 @@
+{
+  "model_name": "model_version4_used",
+  "version": "1.0.0",
+  "task": "object_detection",
+  "framework": "ultralytics-yolo",
+  "weights": {
+    "primary": "models/model_version4_used/best.pt"
+  },
+  "classes": [
+    {
+      "name": "bottle",
+      "aliases": ["plastic bottle", "bottle body"]
+    },
+    {
+      "name": "cap",
+      "aliases": ["bottle cap"]
+    },
+    {
+      "name": "label",
+      "aliases": ["bottle label"]
+    },
+    {
+      "name": "liquid",
+      "aliases": ["visible liquid", "drink"]
+    }
+  ],
+  "intended_use": {
+    "summary": "Detect plastic bottle components for a simple quality-control check. The inspection passes only when bottle, cap, label, and liquid are detected.",
+    "environment": [
+      "plastic bottle inspection",
+      "quality control",
+      "indoor",
+      "production line",
+      "conveyor belt",
+      "demo application"
+    ],
+    "out_of_scope": [
+      "check exact liquid volume",
+      "check cap tightness",
+      "read barcode",
+      "read label text",
+      "check expiration date",
+      "detect bottle scratches or physical damage",
+      "check product type correctness",
+      "check liquid quality or contamination"
+    ]
+  },
+  "data": {
+    "dataset_format": "yolov8",
+    "image_count": {
+      "train": 476,
+      "val": 136,
+      "test": 68
+    },
+    "image_count_after_augmentation": {
+      "train": 1428,
+      "val": 136,
+      "test": 68
+    },
+    "source": "collected_by_students",
+    "labeling_notes": "Boxes cover visible bottle parts only. If a part was missing or not visible, it was not labeled. Labels were created in Roboflow and manually checked."
+  },
+  "training": {
+    "architecture": "YOLOv8m",
+    "pipeline": "Local training using the professor's Jupyter tutorial notebook with Roboflow YOLOv8 dataset export.",
+    "epochs": 100,
+    "image_size": 640,
+    "batch_size": 16,
+    "iou_threshold": 0.70,
+    "patience": 50,
+    "optimizer": "auto",
+    "augmentation": {
+      "tool": "Roboflow",
+      "outputs_per_training_example": 3,
+      "grayscale": "applied to 15% of images",
+      "hue": "between -40 degrees and +40 degrees",
+      "saturation": "between -25% and +25%",
+      "exposure": "between -12% and +12%",
+      "rotation": "not used because bottles are expected to be upright"
+    },
+    "compute": {
+      "device_name": "Dell Pro Max 16",
+      "ram": "32 GB",
+      "gpu": "Intel Arc Pro 140T",
+      "cpu": "Intel Core Ultra 7 255H 2.00 GHz",
+      "training_time": "approximately 26 hours"
+    }
+  },
+  "evaluation": {
+    "test_metrics": {
+      "precision": 0.629,
+      "recall": 0.560,
+      "map50": 0.545,
+      "map5095": 0.349,
+      "per_class_ap50": {
+        "bottle": null,
+        "cap": null,
+        "label": null,
+        "liquid": null
+      }
+    },
+    "best_epoch": 19,
+    "recommended_thresholds": {
+      "confidence": {
+        "bottle": 0.70,
+        "cap": 0.64,
+        "label": 0.62,
+        "liquid": 0.62
+      },
+      "nms_iou": 0.70
+    }
+  },
+  "io": {
+    "input": {
+      "type": "image",
+      "color_space": "RGB"
+    },
+    "output": {
+      "format": "detections_json",
+      "bbox": "xyxy",
+      "score": "confidence"
+    }
+  },
+  "limitations": [
+    "Performance may drop with glare, reflections, poor lighting, or cluttered backgrounds.",
+    "Small caps can be missed.",
+    "Transparent or dark liquid can be missed.",
+    "Labels can be missed when partially visible or reflective.",
+    "Liquid can sometimes be detected twice because of label or reflection confusion.",
+    "Partially visible bottles may lead to missing component detections."
+  ],
+  "runtime": {
+    "model_size_mb": 49.6,
+    "model_size_bytes": 52039890,
+    "latency_ms_cpu": {
+      "average": 287.39,
+      "minimum": 270.61,
+      "maximum": 338.29
+    },
+    "latency_ms_gpu": null,
+    "fps_cpu": 3.48,
+    "fps_video": "approximately 3-5 FPS",
+    "fps_live_camera": "approximately 3-5 FPS"
+  },
+  "deployment": {
+    "used_in_final_app": true,
+    "application": "Python CustomTkinter desktop app",
+    "features": [
+      "image upload",
+      "video upload",
+      "live camera feed",
+      "bounding boxes",
+      "class labels",
+      "confidence values",
+      "PASS/FAILED status",
+      "per-class confidence sliders",
+      "IoU/NMS setting",
+      "inspection counters",
+      "CSV log export"
+    ],
+    "csv_output_fields": [
+      "timestamp",
+      "source",
+      "status",
+      "bottle_count",
+      "cap_count",
+      "label_count",
+      "liquid_count",
+      "total_detections",
+      "max_confidence"
+    ]
+  },
+  "license": {
+    "model": "educational-use",
+    "data": "educational-use",
+    "notes": "Created for an AI practical assignment. No personal identification is required for the model."
+  },
+  "authors": [
+    {
+      "name": "Adéla Polková",
+      "contacts": [
+        "a_polkova@utb.cz",
+        "8250919@estg.ipp.pt"
+      ]
+    },
+    {
+      "name": "Patrik Staňko",
+      "contacts": [
+        "p_stantko@utb.cz",
+        "8250920@estg.ipp.pt"
+      ]
+    }
+  ]
+}

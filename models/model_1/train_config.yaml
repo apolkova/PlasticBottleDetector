@@ -1,0 +1,81 @@
+model_name: model_version4_used
+version: 1.0.0
+deployment_status: used_in_final_app
+
+task: object_detection
+framework: ultralytics-yolo
+architecture: YOLOv8m
+weights: best.pt
+
+training_pipeline:
+  type: local
+  description: >
+    The model was trained locally using the professor's Jupyter tutorial notebook.
+    The notebook was adjusted to use the Roboflow API key and download the dataset
+    exported in YOLOv8 format.
+
+dataset:
+  format: YOLOv8
+  source: Roboflow export
+  original_image_count: 680
+  original_split:
+    train: 476
+    val: 136
+    test: 68
+  exported_after_augmentation:
+    train: 1428
+    val: 136
+    test: 68
+  classes:
+    - bottle
+    - cap
+    - label
+    - liquid
+
+hyperparameters:
+  epochs: 100
+  image_size: 640
+  batch_size: 16
+  iou_threshold: 0.70
+  patience: 50
+  optimizer: auto
+
+augmentation:
+  tool: Roboflow
+  outputs_per_training_example: 3
+  grayscale: applied_to_15_percent_of_images
+  hue: between_-40_and_+40_degrees
+  saturation: between_-25_and_+25_percent
+  exposure: between_-12_and_+12_percent
+  rotation: not_used
+
+compute:
+  device_name: Dell Pro Max 16
+  ram: 32 GB
+  gpu: Intel Arc Pro 140T
+  cpu: Intel Core Ultra 7 255H 2.00 GHz
+  training_time: approximately 26 hours
+
+runtime:
+  model_size_mb: 49.6
+  model_size_bytes: 52039890
+  latency_ms_cpu:
+    average: 287.39
+    minimum: 270.61
+    maximum: 338.29
+  fps_cpu: 3.48
+  video_fps: approximately 3-5 FPS
+  live_camera_fps: approximately 3-5 FPS
+
+recommended_inference_settings:
+  confidence_thresholds:
+    bottle: 0.70
+    cap: 0.64
+    label: 0.62
+    liquid: 0.62
+  nms_iou: 0.70
+
+notes:
+  - This model was used in the final CustomTkinter demo application.
+  - The model detects bottle, cap, label, and liquid in one inference step.
+  - Rotation augmentation was not used because bottles are expected to be upright in the target use case.
